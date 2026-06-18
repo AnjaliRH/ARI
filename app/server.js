@@ -27,7 +27,7 @@ app.use(cookieSession({
   secret: SESSION_SECRET,
   httpOnly: true,
   sameSite: "lax",
-  secure: true,           // HTTPS only
+  secure: APP_BASE_URL.startsWith("https"), // HTTPS in prod; allows http://localhost in dev
   maxAge: 8 * 60 * 60 * 1000,
 }));
 
