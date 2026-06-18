@@ -2,39 +2,65 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ARI Editor</title>
+<title>ARI Diseases Browser</title>
 <style>
-  body{font-family:Arial,Helvetica,sans-serif;max-width:860px;margin:2rem auto;padding:0 1rem;color:#1f2937}
-  header{display:flex;align-items:center;gap:.75rem;border-bottom:1px solid #e5e7eb;padding-bottom:.75rem}
-  header img{width:32px;height:32px;border-radius:50%}
-  button{background:#1f3864;color:#fff;border:0;border-radius:6px;padding:.5rem .9rem;cursor:pointer}
-  button.secondary{background:#6b7280}
-  input,textarea{width:100%;box-sizing:border-box;font-family:inherit;padding:.5rem;border:1px solid #d1d5db;border-radius:6px}
-  textarea{min-height:320px;font-family:ui-monospace,Consolas,monospace}
-  .row{margin:.75rem 0}.muted{color:#6b7280}.hidden{display:none}
-  #status{padding:.6rem;border-radius:6px;margin-top:.75rem}
-  .ok{background:#e2efda}.err{background:#fce4d6}
-  a{color:#0563c1}
+  :root{--navy:#1f3864;--line:#e5e7eb;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{font-family:Arial,Helvetica,sans-serif;margin:0;color:#1f2937}
+  header{display:flex;align-items:center;gap:.6rem;padding:.7rem 1rem;background:var(--navy);color:#fff}
+  header h1{font-size:1.05rem;margin:0;flex:1}
+  header img{width:28px;height:28px;border-radius:50%}
+  button{background:#fff;color:var(--navy);border:0;border-radius:6px;padding:.4rem .8rem;cursor:pointer;font-weight:bold}
+  button.ghost{background:transparent;color:#fff;border:1px solid #ffffff66}
+  .wrap{display:grid;grid-template-columns:380px 1fr;height:calc(100vh - 52px)}
+  .list{border-right:1px solid var(--line);overflow:auto}
+  .controls{padding:.6rem;position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line)}
+  .controls input,.controls select{width:100%;padding:.45rem;border:1px solid #d1d5db;border-radius:6px;margin-bottom:.4rem;font-family:inherit}
+  .row{display:flex;gap:.5rem}.row>*{flex:1}
+  .item{padding:.55rem .7rem;border-bottom:1px solid #f1f5f9;cursor:pointer}
+  .item:hover{background:#f8fafc}.item.sel{background:#eaf0fb}
+  .item .nm{font-weight:bold}.item .meta{font-size:.78rem;color:var(--muted)}
+  .badge{display:inline-block;font-size:.7rem;padding:.05rem .4rem;border-radius:10px;background:#eef2ff;color:#3730a3;margin-right:.3rem}
+  .badge.nocode{background:#fde8e8;color:#9b1c1c}
+  .detail{overflow:auto;padding:1rem 1.3rem}
+  .detail h2{margin:.2rem 0;color:var(--navy)}
+  .fld{margin:.6rem 0}.fld label{display:block;font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+  .fld input,.fld textarea,.fld select{width:100%;padding:.45rem;border:1px solid #d1d5db;border-radius:6px;font-family:inherit}
+  .fld textarea{min-height:120px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+  a{color:#0563c1}.muted{color:var(--muted)}.count{font-size:.8rem;color:var(--muted);padding:.2rem .2rem .4rem}
+  #status{padding:.6rem;border-radius:6px;margin-top:.6rem}.ok{background:#e2efda}.err{background:#fce4d6}
+  .hidden{display:none}.gate{padding:2rem;text-align:center}
 </style>
 </head>
 <body>
 <header>
-  <strong style="font-size:1.1rem;flex:1">ARI Repository Editor</strong>
-  <span id="who" class="muted"></span>
+  <h1>ARI Diseases Browser</h1>
+  <span id="who" class="muted" style="color:#cdd7ec"></span>
   <img id="avatar" class="hidden" alt="">
   <button id="login">Sign in with GitHub</button>
-  <button id="logout" class="secondary hidden">Sign out</button>
+  <button id="logout" class="ghost hidden">Sign out</button>
 </header>
 
-<p class="muted">Edits are committed to GitHub <strong>under your own GitHub identity</strong> on a new branch, then opened as a pull request for review.</p>
+<div id="gate" class="gate">
+  <p>Browse the autoimmune disease registry. <strong>Sign in with GitHub</strong> to propose edits — changes are committed under your own identity as a pull request.</p>
+</div>
 
-<div id="editor" class="hidden">
-  <div class="row"><label>File path in repo<br><input id="path" placeholder="data/README.md" value="data/README.md"></label>
-    <button id="load" class="secondary" style="margin-top:.5rem">Load file</button></div>
-  <div class="row"><label>Content<br><textarea id="content" placeholder="Load a file to edit..."></textarea></label></div>
-  <div class="row"><label>Commit message<br><input id="message" placeholder="Describe your change"></label></div>
-  <div class="row"><button id="submit">Submit change (opens PR)</button></div>
-  <div id="status" class="hidden"></div>
+<div id="app" class="wrap hidden">
+  <div class="list">
+    <div class="controls">
+      <input id="q" placeholder="Search name, synonym, ARI ID, code...">
+      <div class="row">
+        <select id="tissue"><option value="">All tissue regions</option></select>
+        <select id="evidence"><option value="">All evidence</option></select>
+      </div>
+      <label class="muted" style="font-size:.8rem"><input type="checkbox" id="nocode" style="width:auto"> No-code only</label>
+      <div class="count" id="count"></div>
+    </div>
+    <div id="items"></div>
+  </div>
+
+  <div class="detail" id="detail"><p class="muted">Select a disease from the list.</p></div>
 </div>
 
 <script src="app.js"></script>
