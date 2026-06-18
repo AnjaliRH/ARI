@@ -1,0 +1,15 @@
+{
+  "name": "ari-github-editor",
+  "version": "1.0.0",
+  "description": "Per-user GitHub OAuth editor for the ARI repo. Users sign in with GitHub; edits are committed under their own identity via a pull request.",
+  "type": "module",
+  "main": "server.js",
+  "engines": { "node": ">=18" },
+  "scripts": { "start": "node server.js" },
+  "dependencies": {
+    "@octokit/rest": "^21.0.2",
+    "cookie-session": "^2.1.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2"
+  }
+}

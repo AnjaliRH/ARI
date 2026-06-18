@@ -1,0 +1,22 @@
+# /etc/systemd/system/ari-editor.service
+[Unit]
+Description=ARI GitHub Editor
+After=network.target
+
+[Service]
+Type=simple
+User=ariapp
+WorkingDirectory=/opt/ari-editor/app
+# Secrets live in this file (chmod 600, owned by ariapp). Never web-served.
+EnvironmentFile=/opt/ari-editor/app/.env
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+# hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/opt/ari-editor
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

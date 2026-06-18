@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARI Editor</title>
+<style>
+  body{font-family:Arial,Helvetica,sans-serif;max-width:860px;margin:2rem auto;padding:0 1rem;color:#1f2937}
+  header{display:flex;align-items:center;gap:.75rem;border-bottom:1px solid #e5e7eb;padding-bottom:.75rem}
+  header img{width:32px;height:32px;border-radius:50%}
+  button{background:#1f3864;color:#fff;border:0;border-radius:6px;padding:.5rem .9rem;cursor:pointer}
+  button.secondary{background:#6b7280}
+  input,textarea{width:100%;box-sizing:border-box;font-family:inherit;padding:.5rem;border:1px solid #d1d5db;border-radius:6px}
+  textarea{min-height:320px;font-family:ui-monospace,Consolas,monospace}
+  .row{margin:.75rem 0}.muted{color:#6b7280}.hidden{display:none}
+  #status{padding:.6rem;border-radius:6px;margin-top:.75rem}
+  .ok{background:#e2efda}.err{background:#fce4d6}
+  a{color:#0563c1}
+</style>
+</head>
+<body>
+<header>
+  <strong style="font-size:1.1rem;flex:1">ARI Repository Editor</strong>
+  <span id="who" class="muted"></span>
+  <img id="avatar" class="hidden" alt="">
+  <button id="login">Sign in with GitHub</button>
+  <button id="logout" class="secondary hidden">Sign out</button>
+</header>
+
+<p class="muted">Edits are committed to GitHub <strong>under your own GitHub identity</strong> on a new branch, then opened as a pull request for review.</p>
+
+<div id="editor" class="hidden">
+  <div class="row"><label>File path in repo<br><input id="path" placeholder="data/README.md" value="data/README.md"></label>
+    <button id="load" class="secondary" style="margin-top:.5rem">Load file</button></div>
+  <div class="row"><label>Content<br><textarea id="content" placeholder="Load a file to edit..."></textarea></label></div>
+  <div class="row"><label>Commit message<br><input id="message" placeholder="Describe your change"></label></div>
+  <div class="row"><button id="submit">Submit change (opens PR)</button></div>
+  <div id="status" class="hidden"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
